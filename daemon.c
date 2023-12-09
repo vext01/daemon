@@ -18,15 +18,15 @@ main(int argc, char **argv)
 	 *
 	 * Of course these checks are all racy, but that's all we've got.
 	 */
+	if (argv[1][0] != '/')
+		errx(EXIT_FAILURE, "path must be absolute");
+
 	struct stat st;
 	if (stat(argv[1], &st) == -1)
 		err(EXIT_FAILURE, "stat");
 
 	if (!S_ISREG(st.st_mode))
 		errx(EXIT_FAILURE, "not a regular file");
-
-	if (argv[1][0] != '/')
-		errx(EXIT_FAILURE, "path must be absolute");
 
 	if (access(argv[1], X_OK) == -1)
 		errx(EXIT_FAILURE, "no permission to execute");
